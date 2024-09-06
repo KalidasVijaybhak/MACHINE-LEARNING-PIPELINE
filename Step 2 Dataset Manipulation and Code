@@ -1,0 +1,2338 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "e6bbc1cd",
+   "metadata": {
+    "_cell_guid": "b1076dfc-b9ad-4769-8c92-a6c4dae69d19",
+    "_uuid": "8f2839f25d086af736a60e9eeb907d3b93b6e0e5",
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:42:02.211379Z",
+     "iopub.status.busy": "2024-09-06T06:42:02.210861Z",
+     "iopub.status.idle": "2024-09-06T06:42:02.221700Z",
+     "shell.execute_reply": "2024-09-06T06:42:02.220586Z"
+    },
+    "papermill": {
+     "duration": 0.028824,
+     "end_time": "2024-09-06T06:42:02.224213",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.195389",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "import os \n",
+    "import shutil\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "36c423cc",
+   "metadata": {
+    "papermill": {
+     "duration": 0.012934,
+     "end_time": "2024-09-06T06:42:02.250386",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.237452",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **First Understand the dataset File structure**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "8d85137c",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:42:02.279237Z",
+     "iopub.status.busy": "2024-09-06T06:42:02.278831Z",
+     "iopub.status.idle": "2024-09-06T06:42:02.284927Z",
+     "shell.execute_reply": "2024-09-06T06:42:02.283805Z"
+    },
+    "papermill": {
+     "duration": 0.023227,
+     "end_time": "2024-09-06T06:42:02.287704",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.264477",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Current Directory: /kaggle/working\n"
+     ]
+    }
+   ],
+   "source": [
+    "import os\n",
+    "\n",
+    "current_directory = os.getcwd()\n",
+    "print(\"Current Directory:\", current_directory)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cdcb9136",
+   "metadata": {
+    "papermill": {
+     "duration": 0.012833,
+     "end_time": "2024-09-06T06:42:02.313657",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.300824",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# List Dirs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "fbcb602b",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:42:02.342192Z",
+     "iopub.status.busy": "2024-09-06T06:42:02.340604Z",
+     "iopub.status.idle": "2024-09-06T06:42:02.353815Z",
+     "shell.execute_reply": "2024-09-06T06:42:02.352749Z"
+    },
+    "papermill": {
+     "duration": 0.029909,
+     "end_time": "2024-09-06T06:42:02.356452",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.326543",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Meta',\n",
+       " 'meta',\n",
+       " 'Meta.csv',\n",
+       " 'Train.csv',\n",
+       " 'Test.csv',\n",
+       " 'Test',\n",
+       " 'test',\n",
+       " 'Train',\n",
+       " 'train']"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "os.listdir(\"/kaggle/input/gtsrb-german-traffic-sign\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "051b6e74",
+   "metadata": {
+    "papermill": {
+     "duration": 0.012981,
+     "end_time": "2024-09-06T06:42:02.382987",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.370006",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# List Dirs in a more efficient way"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "c454644e",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:42:02.410977Z",
+     "iopub.status.busy": "2024-09-06T06:42:02.410560Z",
+     "iopub.status.idle": "2024-09-06T06:42:02.418082Z",
+     "shell.execute_reply": "2024-09-06T06:42:02.416705Z"
+    },
+    "papermill": {
+     "duration": 0.02442,
+     "end_time": "2024-09-06T06:42:02.420636",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.396216",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Meta\n",
+      "meta\n",
+      "Meta.csv\n",
+      "Train.csv\n",
+      "Test.csv\n",
+      "Test\n",
+      "test\n",
+      "Train\n",
+      "train\n"
+     ]
+    }
+   ],
+   "source": [
+    "import os\n",
+    "\n",
+    "with os.scandir('/kaggle/input/gtsrb-german-traffic-sign') as entries:\n",
+    "    for entry in entries:\n",
+    "        print(entry.name)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "15f445a9",
+   "metadata": {
+    "papermill": {
+     "duration": 0.01281,
+     "end_time": "2024-09-06T06:42:02.446672",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.433862",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Uses to get all the directory stucture including all files and folders"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "a9baa485",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:42:02.474611Z",
+     "iopub.status.busy": "2024-09-06T06:42:02.474155Z",
+     "iopub.status.idle": "2024-09-06T06:43:34.637209Z",
+     "shell.execute_reply": "2024-09-06T06:43:34.635914Z"
+    },
+    "papermill": {
+     "duration": 92.180149,
+     "end_time": "2024-09-06T06:43:34.639906",
+     "exception": false,
+     "start_time": "2024-09-06T06:42:02.459757",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Subdirectories in /kaggle/input/gtsrb-german-traffic-sign:\n",
+      "  - ['Meta', 'meta', 'Test', 'test', 'Train', 'train']\n",
+      "Subdirectories in /kaggle/input/gtsrb-german-traffic-sign/Train:\n",
+      "  - ['7', '17', '19', '22', '2', '35', '23', '10', '5', '36', '20', '27', '41', '39', '32', '25', '42', '8', '38', '12', '0', '31', '34', '18', '28', '16', '13', '26', '15', '3', '1', '30', '14', '4', '9', '21', '40', '6', '11', '37', '33', '29', '24']\n",
+      "Subdirectories in /kaggle/input/gtsrb-german-traffic-sign/train:\n",
+      "  - ['7', '17', '19', '22', '2', '35', '23', '10', '5', '36', '20', '27', '41', '39', '32', '25', '42', '8', '38', '12', '0', '31', '34', '18', '28', '16', '13', '26', '15', '3', '1', '30', '14', '4', '9', '21', '40', '6', '11', '37', '33', '29', '24']\n"
+     ]
+    }
+   ],
+   "source": [
+    "import os\n",
+    "\n",
+    "for dirpath, dirnames, filenames in os.walk('/kaggle/input/gtsrb-german-traffic-sign'):\n",
+    "#     if dirpath == \"/kaggle/input/gtsrb-german-traffic-sign/Train\":\n",
+    "#         continue\n",
+    "    if dirnames:\n",
+    "        print(f\"Subdirectories in {dirpath}:\")\n",
+    "#         for dirname in dirnames:\n",
+    "        print(f\"  - {dirnames}\")\n",
+    "#     print(f'Found directory: {dirpath}')\n",
+    "#     for filename in filenames:\n",
+    "#         print(f'\\t{filename}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "8e7f601d",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:34.669509Z",
+     "iopub.status.busy": "2024-09-06T06:43:34.668359Z",
+     "iopub.status.idle": "2024-09-06T06:43:34.676808Z",
+     "shell.execute_reply": "2024-09-06T06:43:34.675710Z"
+    },
+    "papermill": {
+     "duration": 0.025764,
+     "end_time": "2024-09-06T06:43:34.679161",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.653397",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Meta',\n",
+       " 'meta',\n",
+       " 'Meta.csv',\n",
+       " 'Train.csv',\n",
+       " 'Test.csv',\n",
+       " 'Test',\n",
+       " 'test',\n",
+       " 'Train',\n",
+       " 'train']"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "os.listdir(\"/kaggle/input/gtsrb-german-traffic-sign/\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "9a5dc39d",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:34.708241Z",
+     "iopub.status.busy": "2024-09-06T06:43:34.707857Z",
+     "iopub.status.idle": "2024-09-06T06:43:34.716127Z",
+     "shell.execute_reply": "2024-09-06T06:43:34.714607Z"
+    },
+    "papermill": {
+     "duration": 0.026563,
+     "end_time": "2024-09-06T06:43:34.719400",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.692837",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "43\n",
+      "['7', '17', '19', '22', '2', '35', '23', '10', '5', '36', '20', '27', '41', '39', '32', '25', '42', '8', '38', '12', '0', '31', '34', '18', '28', '16', '13', '26', '15', '3', '1', '30', '14', '4', '9', '21', '40', '6', '11', '37', '33', '29', '24']\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = len(os.listdir(\"/kaggle/input/gtsrb-german-traffic-sign/Train\"))\n",
+    "\n",
+    "print(x)\n",
+    "print(os.listdir(\"/kaggle/input/gtsrb-german-traffic-sign/Train\"))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "664b77b8",
+   "metadata": {
+    "papermill": {
+     "duration": 0.014837,
+     "end_time": "2024-09-06T06:43:34.748515",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.733678",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Deleting a file**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "365f92fe",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:34.779379Z",
+     "iopub.status.busy": "2024-09-06T06:43:34.778967Z",
+     "iopub.status.idle": "2024-09-06T06:43:34.784318Z",
+     "shell.execute_reply": "2024-09-06T06:43:34.782813Z"
+    },
+    "papermill": {
+     "duration": 0.023821,
+     "end_time": "2024-09-06T06:43:34.786998",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.763177",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# import os\n",
+    "\n",
+    "# os.rmdir('/path/to/empty_directory')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c678aa1e",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013718,
+     "end_time": "2024-09-06T06:43:34.814205",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.800487",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Delete an empty directry**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "7cc6072a",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:34.845149Z",
+     "iopub.status.busy": "2024-09-06T06:43:34.844733Z",
+     "iopub.status.idle": "2024-09-06T06:43:34.849781Z",
+     "shell.execute_reply": "2024-09-06T06:43:34.848591Z"
+    },
+    "papermill": {
+     "duration": 0.024194,
+     "end_time": "2024-09-06T06:43:34.852939",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.828745",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# import os\n",
+    "\n",
+    "# os.rmdir('/path/to/empty_directory')\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f240b43f",
+   "metadata": {
+    "papermill": {
+     "duration": 0.014848,
+     "end_time": "2024-09-06T06:43:34.883885",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.869037",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Make a new directory**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "5154b546",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:34.916328Z",
+     "iopub.status.busy": "2024-09-06T06:43:34.915922Z",
+     "iopub.status.idle": "2024-09-06T06:43:34.921516Z",
+     "shell.execute_reply": "2024-09-06T06:43:34.920159Z"
+    },
+    "papermill": {
+     "duration": 0.024923,
+     "end_time": "2024-09-06T06:43:34.924526",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.899603",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "os.mkdir(\"/kaggle/working/new_db\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "fb8e6f0a",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:34.955227Z",
+     "iopub.status.busy": "2024-09-06T06:43:34.954236Z",
+     "iopub.status.idle": "2024-09-06T06:43:34.960656Z",
+     "shell.execute_reply": "2024-09-06T06:43:34.958826Z"
+    },
+    "papermill": {
+     "duration": 0.024516,
+     "end_time": "2024-09-06T06:43:34.963339",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.938823",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "os.mkdir(\"/kaggle/working/new_db/Train\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b4a4d525",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013312,
+     "end_time": "2024-09-06T06:43:34.990276",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:34.976964",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Delete directory and its contents**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "94f5c7ad",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.020554Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.019301Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.025329Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.024140Z"
+    },
+    "papermill": {
+     "duration": 0.024244,
+     "end_time": "2024-09-06T06:43:35.028141",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.003897",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "\n",
+    "shutil.rmtree(\"/kaggle/working/new_db\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4a90b6c2",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013694,
+     "end_time": "2024-09-06T06:43:35.055599",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.041905",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Copy contents of a directory to another**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "d8870b5f",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.085085Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.084648Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.090168Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.089007Z"
+    },
+    "papermill": {
+     "duration": 0.02301,
+     "end_time": "2024-09-06T06:43:35.092660",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.069650",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# import shutil\n",
+    "# import os\n",
+    "\n",
+    "# # Define source and destination paths\n",
+    "# source_dir = '/kaggle/input/gtsrb-german-traffic-sign/Train'\n",
+    "# destination_dir = '/kaggle/working/new_db/Train'\n",
+    "\n",
+    "# # Copy the entire directory tree from source to destination, allowing overwriting\n",
+    "# shutil.copytree(source_dir, destination_dir, dirs_exist_ok=True)\n",
+    "# print(f\"Directory '{source_dir}' copied to '{destination_dir}' successfully.\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c7a1cbb4",
+   "metadata": {
+    "papermill": {
+     "duration": 0.015281,
+     "end_time": "2024-09-06T06:43:35.122257",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.106976",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Changeing names of dirs**\n",
+    "remeber dir names must not have / in them"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "b2e4dd89",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.151976Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.151563Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.159814Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.158320Z"
+    },
+    "papermill": {
+     "duration": 0.025743,
+     "end_time": "2024-09-06T06:43:35.162336",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.136593",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "class_names = { \n",
+    "    0:'Speed limit (20km-h)',\n",
+    "    1:'Speed limit (30km-h)', \n",
+    "    2:'Speed limit (50km-h)', \n",
+    "    3:'Speed limit (60km-h)', \n",
+    "    4:'Speed limit (70km-h)', \n",
+    "    5:'Speed limit (80km-h)', \n",
+    "    6:'End of speed limit (80km-h)', \n",
+    "    7:'Speed limit (100km-h)', \n",
+    "    8:'Speed limit (120km-h)', \n",
+    "    9:'No passing', \n",
+    "    10:'No passing veh over 3.5 tons', \n",
+    "    11:'Right-of-way at intersection', \n",
+    "    12:'Priority road', \n",
+    "    13:'Yield', \n",
+    "    14:'Stop', \n",
+    "    15:'No vehicles', \n",
+    "    16:'Veh > 3.5 tons prohibited', \n",
+    "    17:'No entry', \n",
+    "    18:'General caution', \n",
+    "    19:'Dangerous curve left', \n",
+    "    20:'Dangerous curve right', \n",
+    "    21:'Double curve', \n",
+    "    22:'Bumpy road', \n",
+    "    23:'Slippery road', \n",
+    "    24:'Road narrows on the right', \n",
+    "    25:'Road work', \n",
+    "    26:'Traffic signals', \n",
+    "    27:'Pedestrians', \n",
+    "    28:'Children crossing', \n",
+    "    29:'Bicycles crossing', \n",
+    "    30:'Beware of ice-snow',\n",
+    "    31:'Wild animals crossing', \n",
+    "    32:'End speed + passing limits', \n",
+    "    33:'Turn right ahead', \n",
+    "    34:'Turn left ahead', \n",
+    "    35:'Ahead only', \n",
+    "    36:'Go straight or right', \n",
+    "    37:'Go straight or left', \n",
+    "    38:'Keep right', \n",
+    "    39:'Keep left', \n",
+    "    40:'Roundabout mandatory', \n",
+    "    41:'End of no passing', \n",
+    "    42:'End no passing veh > 3.5 tons' \n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "2a72a1e3",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.191726Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.191300Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.196516Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.195502Z"
+    },
+    "papermill": {
+     "duration": 0.022814,
+     "end_time": "2024-09-06T06:43:35.198819",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.176005",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# import os\n",
+    "\n",
+    "# # Assuming class_names is a dictionary or list\n",
+    "# train_dir = \"/kaggle/working/new_db/Train\"\n",
+    "# if os.path.exists(train_dir) == False:\n",
+    "#     os.makedir(train_dir)\n",
+    "\n",
+    "\n",
+    "# with os.scandir(train_dir) as entries:\n",
+    "#     for entry in entries:\n",
+    "# #         print(entry.name)\n",
+    "# #         print(class_names[int(entry.name)])\n",
+    "# #         if isinstance(entry.name, (int, float)): #to check if a value is a number or not\n",
+    "#         if entry.name.isdigit():\n",
+    "#             destination_dir = os.path.join(train_dir,entry.name)\n",
+    "#             change_dir = os.path.join(train_dir,class_names[int(entry.name)])\n",
+    "#             if os.path.exists(destination_dir):\n",
+    "#                 print(destination_dir,\"Exists\")\n",
+    "#                 os.rename(destination_dir,change_dir)\n",
+    "#                 print(f\"renamed {destination_dir} to {change_dir}\")\n",
+    "#         else:\n",
+    "#             print(\"already renamed\")\n",
+    "# #             continue\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cc24d1af",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013246,
+     "end_time": "2024-09-06T06:43:35.225593",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.212347",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Converting all the images in train dir to two folders Critical/Non-Critical**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "42782ae4",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.254391Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.253952Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.260003Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.258724Z"
+    },
+    "papermill": {
+     "duration": 0.023203,
+     "end_time": "2024-09-06T06:43:35.262222",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.239019",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# import os\n",
+    "# import shutil\n",
+    "\n",
+    "# # Define the paths\n",
+    "# original_dataset = '/kaggle/input/gtsrb-german-traffic-sign/Train'\n",
+    "# new_dataset = '/kaggle/working/new_db'\n",
+    "\n",
+    "# # Define which classes are critical (adjust based on GTSRB class numbers)\n",
+    "# critical_classes = [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]\n",
+    "\n",
+    "# # Create new directories\n",
+    "# os.makedirs(os.path.join(new_dataset, 'critical'), exist_ok=True)\n",
+    "# os.makedirs(os.path.join(new_dataset, 'non_critical'), exist_ok=True)\n",
+    "\n",
+    "# # Iterate through the original dataset\n",
+    "# for class_folder in os.listdir(original_dataset):\n",
+    "#     class_path = os.path.join(original_dataset, class_folder)\n",
+    "#     if os.path.isdir(class_path):\n",
+    "#         class_num = int(class_folder)\n",
+    "#         target_folder = 'critical' if class_num in critical_classes else 'non_critical'\n",
+    "        \n",
+    "#         # Copy images to the new structure\n",
+    "#         for image in os.listdir(class_path):\n",
+    "#             src = os.path.join(class_path, image)\n",
+    "#             dst = os.path.join(new_dataset, target_folder, f\"{class_num}_{image}\")\n",
+    "#             shutil.copy2(src, dst)\n",
+    "\n",
+    "# print(\"Dataset reorganization complete.\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "208b95f3",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.291486Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.291013Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.298000Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.296892Z"
+    },
+    "papermill": {
+     "duration": 0.024758,
+     "end_time": "2024-09-06T06:43:35.300530",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.275772",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "\n",
+    "for dirpath, dirnames, filenames in os.walk(\"/kaggle/working/new_db\"):\n",
+    "#     if dirpath == \"/kaggle/input/gtsrb-german-traffic-sign/Train\":\n",
+    "#         continue\n",
+    "    if dirnames:\n",
+    "        print(dirnames)\n",
+    "    if dirpath:\n",
+    "        print(dirpath)\n",
+    "#     if dirnames:\n",
+    "#         print(f\"Subdirectories in {dirpath}:\")\n",
+    "# #         for dirname in dirnames:\n",
+    "#         print(f\"  - {dirnames}\")\n",
+    "#     print(f'Found directory: {dirpath}')\n",
+    "#     for filename in filenames:\n",
+    "#         print(f'\\t{filename}')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "dcb34d5a",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013548,
+     "end_time": "2024-09-06T06:43:35.328869",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.315321",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    ">  # CSV USAGE AND MANIPULATION"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4312e9d0",
+   "metadata": {
+    "papermill": {
+     "duration": 0.015016,
+     "end_time": "2024-09-06T06:43:35.357994",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.342978",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Reading CSV"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "ef7dfdb7",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.388915Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.388480Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.834094Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.832811Z"
+    },
+    "papermill": {
+     "duration": 0.465126,
+     "end_time": "2024-09-06T06:43:35.836931",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.371805",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "df = pd.read_csv('/kaggle/input/gtsrb-german-traffic-sign/Test.csv')\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b75db882",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013363,
+     "end_time": "2024-09-06T06:43:35.864097",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.850734",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Printing first 5 elements"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "7b9451a0",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.894839Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.894406Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.916398Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.915077Z"
+    },
+    "papermill": {
+     "duration": 0.041393,
+     "end_time": "2024-09-06T06:43:35.919281",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.877888",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<bound method NDFrame.head of        Width  Height  Roi.X1  Roi.Y1  Roi.X2  Roi.Y2  ClassId            Path\n",
+      "0         53      54       6       5      48      49       16  Test/00000.png\n",
+      "1         42      45       5       5      36      40        1  Test/00001.png\n",
+      "2         48      52       6       6      43      47       38  Test/00002.png\n",
+      "3         27      29       5       5      22      24       33  Test/00003.png\n",
+      "4         60      57       5       5      55      52       11  Test/00004.png\n",
+      "...      ...     ...     ...     ...     ...     ...      ...             ...\n",
+      "12625     42      41       5       6      37      36       12  Test/12625.png\n",
+      "12626     50      51       6       5      45      46       33  Test/12626.png\n",
+      "12627     29      29       6       6      24      24        6  Test/12627.png\n",
+      "12628     48      49       5       6      43      44        7  Test/12628.png\n",
+      "12629     32      31       6       5      27      26       10  Test/12629.png\n",
+      "\n",
+      "[12630 rows x 8 columns]>\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df.head)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fd64f47f",
+   "metadata": {
+    "papermill": {
+     "duration": 0.0136,
+     "end_time": "2024-09-06T06:43:35.947880",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.934280",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Printing Last 5 elements"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "0404c9f1",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:35.978269Z",
+     "iopub.status.busy": "2024-09-06T06:43:35.977874Z",
+     "iopub.status.idle": "2024-09-06T06:43:35.987855Z",
+     "shell.execute_reply": "2024-09-06T06:43:35.986619Z"
+    },
+    "papermill": {
+     "duration": 0.028489,
+     "end_time": "2024-09-06T06:43:35.990660",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:35.962171",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<bound method NDFrame.tail of        Width  Height  Roi.X1  Roi.Y1  Roi.X2  Roi.Y2  ClassId            Path\n",
+      "0         53      54       6       5      48      49       16  Test/00000.png\n",
+      "1         42      45       5       5      36      40        1  Test/00001.png\n",
+      "2         48      52       6       6      43      47       38  Test/00002.png\n",
+      "3         27      29       5       5      22      24       33  Test/00003.png\n",
+      "4         60      57       5       5      55      52       11  Test/00004.png\n",
+      "...      ...     ...     ...     ...     ...     ...      ...             ...\n",
+      "12625     42      41       5       6      37      36       12  Test/12625.png\n",
+      "12626     50      51       6       5      45      46       33  Test/12626.png\n",
+      "12627     29      29       6       6      24      24        6  Test/12627.png\n",
+      "12628     48      49       5       6      43      44        7  Test/12628.png\n",
+      "12629     32      31       6       5      27      26       10  Test/12629.png\n",
+      "\n",
+      "[12630 rows x 8 columns]>\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df.tail)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "d9d07c91",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.020373Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.019964Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.027917Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.026365Z"
+    },
+    "papermill": {
+     "duration": 0.025973,
+     "end_time": "2024-09-06T06:43:36.030540",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.004567",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0        16\n",
+      "1         1\n",
+      "2        38\n",
+      "3        33\n",
+      "4        11\n",
+      "         ..\n",
+      "12625    12\n",
+      "12626    33\n",
+      "12627     6\n",
+      "12628     7\n",
+      "12629    10\n",
+      "Name: ClassId, Length: 12630, dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df['ClassId'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "e687fd13",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.061957Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.061527Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.068835Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.067694Z"
+    },
+    "papermill": {
+     "duration": 0.026582,
+     "end_time": "2024-09-06T06:43:36.072093",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.045511",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0        16\n",
+      "1         1\n",
+      "2        38\n",
+      "3        33\n",
+      "4        11\n",
+      "         ..\n",
+      "12625    12\n",
+      "12626    33\n",
+      "12627     6\n",
+      "12628     7\n",
+      "12629    10\n",
+      "Name: ClassId, Length: 12630, dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df['ClassId'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "8a372d13",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.103006Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.102560Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.111053Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.109829Z"
+    },
+    "papermill": {
+     "duration": 0.026768,
+     "end_time": "2024-09-06T06:43:36.113605",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.086837",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "class_names = { \n",
+    "    0:'Speed limit (20km-h)',\n",
+    "    1:'Speed limit (30km-h)', \n",
+    "    2:'Speed limit (50km-h)', \n",
+    "    3:'Speed limit (60km-h)', \n",
+    "    4:'Speed limit (70km-h)', \n",
+    "    5:'Speed limit (80km-h)', \n",
+    "    6:'End of speed limit (80km-h)', \n",
+    "    7:'Speed limit (100km-h)', \n",
+    "    8:'Speed limit (120km-h)', \n",
+    "    9:'No passing', \n",
+    "    10:'No passing veh over 3.5 tons', \n",
+    "    11:'Right-of-way at intersection', \n",
+    "    12:'Priority road', \n",
+    "    13:'Yield', \n",
+    "    14:'Stop', \n",
+    "    15:'No vehicles', \n",
+    "    16:'Veh > 3.5 tons prohibited', \n",
+    "    17:'No entry', \n",
+    "    18:'General caution', \n",
+    "    19:'Dangerous curve left', \n",
+    "    20:'Dangerous curve right', \n",
+    "    21:'Double curve', \n",
+    "    22:'Bumpy road', \n",
+    "    23:'Slippery road', \n",
+    "    24:'Road narrows on the right', \n",
+    "    25:'Road work', \n",
+    "    26:'Traffic signals', \n",
+    "    27:'Pedestrians', \n",
+    "    28:'Children crossing', \n",
+    "    29:'Bicycles crossing', \n",
+    "    30:'Beware of ice-snow',\n",
+    "    31:'Wild animals crossing', \n",
+    "    32:'End speed + passing limits', \n",
+    "    33:'Turn right ahead', \n",
+    "    34:'Turn left ahead', \n",
+    "    35:'Ahead only', \n",
+    "    36:'Go straight or right', \n",
+    "    37:'Go straight or left', \n",
+    "    38:'Keep right', \n",
+    "    39:'Keep left', \n",
+    "    40:'Roundabout mandatory', \n",
+    "    41:'End of no passing', \n",
+    "    42:'End no passing veh > 3.5 tons' \n",
+    "}\n",
+    "critical_classes = [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b8f325a0",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013608,
+     "end_time": "2024-09-06T06:43:36.141953",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.128345",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "#  ***If class id is in critical class create a new row and add 1 else if in non critical class add 0***"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "29862b25",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.172511Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.172075Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.187827Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.186528Z"
+    },
+    "papermill": {
+     "duration": 0.034794,
+     "end_time": "2024-09-06T06:43:36.190689",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.155895",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "def is_critical(element):\n",
+    "    return 1 if int(element) in critical_classes else 0\n",
+    "df['Layer1_output'] = df['ClassId'].apply(is_critical)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "64863f8f",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.220772Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.220333Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.232761Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.231447Z"
+    },
+    "papermill": {
+     "duration": 0.0304,
+     "end_time": "2024-09-06T06:43:36.235195",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.204795",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "       Width  Height  Roi.X1  Roi.Y1  Roi.X2  Roi.Y2  ClassId            Path  \\\n",
+      "0         53      54       6       5      48      49       16  Test/00000.png   \n",
+      "1         42      45       5       5      36      40        1  Test/00001.png   \n",
+      "2         48      52       6       6      43      47       38  Test/00002.png   \n",
+      "3         27      29       5       5      22      24       33  Test/00003.png   \n",
+      "4         60      57       5       5      55      52       11  Test/00004.png   \n",
+      "...      ...     ...     ...     ...     ...     ...      ...             ...   \n",
+      "12625     42      41       5       6      37      36       12  Test/12625.png   \n",
+      "12626     50      51       6       5      45      46       33  Test/12626.png   \n",
+      "12627     29      29       6       6      24      24        6  Test/12627.png   \n",
+      "12628     48      49       5       6      43      44        7  Test/12628.png   \n",
+      "12629     32      31       6       5      27      26       10  Test/12629.png   \n",
+      "\n",
+      "       Layer1_output  \n",
+      "0                  0  \n",
+      "1                  0  \n",
+      "2                  0  \n",
+      "3                  0  \n",
+      "4                  0  \n",
+      "...              ...  \n",
+      "12625              0  \n",
+      "12626              0  \n",
+      "12627              0  \n",
+      "12628              0  \n",
+      "12629              0  \n",
+      "\n",
+      "[12630 rows x 9 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ede6556b",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013858,
+     "end_time": "2024-09-06T06:43:36.319999",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.306141",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "> CHECKING\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "248a4eab",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.350580Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.349308Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.356453Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.354731Z"
+    },
+    "papermill": {
+     "duration": 0.025231,
+     "end_time": "2024-09-06T06:43:36.359204",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.333973",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "23\n",
+      "1\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df['ClassId'][12])\n",
+    "print(df['Layer1_output'][12])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ed82205d",
+   "metadata": {
+    "papermill": {
+     "duration": 0.01368,
+     "end_time": "2024-09-06T06:43:36.387091",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.373411",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Get Count for verification"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "5d662c82",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.417874Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.416510Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.427619Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.426379Z"
+    },
+    "papermill": {
+     "duration": 0.029063,
+     "end_time": "2024-09-06T06:43:36.430070",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.401007",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "10261\n",
+      "2370\n"
+     ]
+    }
+   ],
+   "source": [
+    "count_critical =0\n",
+    "count_non_critical = 1\n",
+    "for i in df['Layer1_output']:\n",
+    "    if i ==0:\n",
+    "        count_non_critical+=1\n",
+    "    else:\n",
+    "        count_critical+=1\n",
+    "print(count_non_critical)\n",
+    "print(count_critical)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a5201de8",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013914,
+     "end_time": "2024-09-06T06:43:36.458200",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.444286",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# > **Critical and Non critical path values of values of df based on Layer1_output  class values 0 or 1**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ab44fe7d",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013942,
+     "end_time": "2024-09-06T06:43:36.486302",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.472360",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Create two diff data frames for labels "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "106aa441",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.517551Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.516622Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.764634Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.763301Z"
+    },
+    "papermill": {
+     "duration": 0.2666,
+     "end_time": "2024-09-06T06:43:36.767550",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.500950",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# Initialize an empty DataFrame\n",
+    "df_non_critical = pd.DataFrame()\n",
+    "df_critical = pd.DataFrame()\n",
+    "\n",
+    "# Add paths to corresponding columns based on Layer1_output\n",
+    "df_non_critical['Non_Critical'] = df.apply(lambda df: df['Path'] if df['Layer1_output'] == 0 else None, axis=1)\n",
+    "df_critical['Critical'] = df.apply(lambda df: df['Path'] if df['Layer1_output'] == 1 else None, axis=1)\n",
+    "\n",
+    "# Optional: Remove rows with NaN values in both columns (if desired)\n",
+    "# new_df.dropna(how='all', inplace=True)\n",
+    "\n",
+    "# print(new_df.head())\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "37098f62",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.798396Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.797998Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.805649Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.804517Z"
+    },
+    "papermill": {
+     "duration": 0.027072,
+     "end_time": "2024-09-06T06:43:36.808806",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.781734",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "      Critical\n",
+      "0         None\n",
+      "1         None\n",
+      "2         None\n",
+      "3         None\n",
+      "4         None\n",
+      "...        ...\n",
+      "12625     None\n",
+      "12626     None\n",
+      "12627     None\n",
+      "12628     None\n",
+      "12629     None\n",
+      "\n",
+      "[12630 rows x 1 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_critical)\n",
+    "# print()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "223e51ec",
+   "metadata": {
+    "papermill": {
+     "duration": 0.014257,
+     "end_time": "2024-09-06T06:43:36.837399",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.823142",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ce1bb793",
+   "metadata": {
+    "papermill": {
+     "duration": 0.013988,
+     "end_time": "2024-09-06T06:43:36.865657",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.851669",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Check if null values are properly there "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "7942a5c7",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.898154Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.897767Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.912038Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.910745Z"
+    },
+    "papermill": {
+     "duration": 0.033,
+     "end_time": "2024-09-06T06:43:36.914726",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.881726",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "         Non_Critical\n",
+      "0      Test/00000.png\n",
+      "1      Test/00001.png\n",
+      "2      Test/00002.png\n",
+      "3      Test/00003.png\n",
+      "4      Test/00004.png\n",
+      "...               ...\n",
+      "12625  Test/12625.png\n",
+      "12626  Test/12626.png\n",
+      "12627  Test/12627.png\n",
+      "12628  Test/12628.png\n",
+      "12629  Test/12629.png\n",
+      "\n",
+      "[10260 rows x 1 columns]\n",
+      "0\n"
+     ]
+    }
+   ],
+   "source": [
+    "# print(df_non_critical)\n",
+    "null_count = 0\n",
+    "df_cleaned_non_critical = df_non_critical.dropna()\n",
+    "print(df_cleaned_non_critical)\n",
+    "for i in df_cleaned_non_critical['Non_Critical']:\n",
+    "    if i :\n",
+    "        continue\n",
+    "    else:\n",
+    "        null_count+=1\n",
+    "print(null_count)\n",
+    "        \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "52f2d4d9",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:36.946294Z",
+     "iopub.status.busy": "2024-09-06T06:43:36.945903Z",
+     "iopub.status.idle": "2024-09-06T06:43:36.957963Z",
+     "shell.execute_reply": "2024-09-06T06:43:36.956506Z"
+    },
+    "papermill": {
+     "duration": 0.031328,
+     "end_time": "2024-09-06T06:43:36.960509",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.929181",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "             Critical\n",
+      "6      Test/00006.png\n",
+      "8      Test/00008.png\n",
+      "12     Test/00012.png\n",
+      "16     Test/00016.png\n",
+      "17     Test/00017.png\n",
+      "...               ...\n",
+      "12608  Test/12608.png\n",
+      "12616  Test/12616.png\n",
+      "12617  Test/12617.png\n",
+      "12619  Test/12619.png\n",
+      "12624  Test/12624.png\n",
+      "\n",
+      "[2370 rows x 1 columns]\n",
+      "2370\n"
+     ]
+    }
+   ],
+   "source": [
+    "# print(df_non_critical)\n",
+    "null_count = 0\n",
+    "df_cleaned_critical = df_critical.dropna()\n",
+    "print(df_cleaned_critical)\n",
+    "for i in df_cleaned_critical['Critical']:\n",
+    "    if i :\n",
+    "        continue\n",
+    "    else:\n",
+    "        null_count+=1\n",
+    "print(len(df_cleaned_critical))\n",
+    "        \n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1f7d264a",
+   "metadata": {
+    "papermill": {
+     "duration": 0.015248,
+     "end_time": "2024-09-06T06:43:36.990361",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:36.975113",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Merge the new df with old df for getting corresponding row values "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "1a3e1716",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.023365Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.022930Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.044826Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.043512Z"
+    },
+    "papermill": {
+     "duration": 0.040807,
+     "end_time": "2024-09-06T06:43:37.047135",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.006328",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "         Non_Critical            Path  ClassId\n",
+      "0      Test/00000.png  Test/00000.png       16\n",
+      "1      Test/00001.png  Test/00001.png        1\n",
+      "2      Test/00002.png  Test/00002.png       38\n",
+      "3      Test/00003.png  Test/00003.png       33\n",
+      "4      Test/00004.png  Test/00004.png       11\n",
+      "...               ...             ...      ...\n",
+      "10255  Test/12625.png  Test/12625.png       12\n",
+      "10256  Test/12626.png  Test/12626.png       33\n",
+      "10257  Test/12627.png  Test/12627.png        6\n",
+      "10258  Test/12628.png  Test/12628.png        7\n",
+      "10259  Test/12629.png  Test/12629.png       10\n",
+      "\n",
+      "[10260 rows x 3 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_non_critical_final = pd.merge(df_cleaned_non_critical, df[['Path', 'ClassId']], left_on='Non_Critical', right_on='Path', how='left')\n",
+    "# result_df2 = pd.merge(new_df, df[['Path', 'ClassId']], left_on='Non_Critical', right_on='Path', how='left')\n",
+    "\n",
+    "print(df_non_critical_final )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "0b1bea2a",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.078871Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.077714Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.091058Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.089871Z"
+    },
+    "papermill": {
+     "duration": 0.031648,
+     "end_time": "2024-09-06T06:43:37.093467",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.061819",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "def is_critical(element):\n",
+    "    return 1 if int(element) in critical_classes else 0\n",
+    "df_non_critical_final['Layer1_output'] = df_non_critical_final['ClassId'].apply(is_critical)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "213a425e",
+   "metadata": {
+    "papermill": {
+     "duration": 0.014539,
+     "end_time": "2024-09-06T06:43:37.122483",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.107944",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Print random samples from df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "c83b0f31",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.153956Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.153527Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.167714Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.166527Z"
+    },
+    "papermill": {
+     "duration": 0.032496,
+     "end_time": "2024-09-06T06:43:37.170004",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.137508",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Non_Critical</th>\n",
+       "      <th>Path</th>\n",
+       "      <th>ClassId</th>\n",
+       "      <th>Layer1_output</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>10255</th>\n",
+       "      <td>Test/12625.png</td>\n",
+       "      <td>Test/12625.png</td>\n",
+       "      <td>12</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10256</th>\n",
+       "      <td>Test/12626.png</td>\n",
+       "      <td>Test/12626.png</td>\n",
+       "      <td>33</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10257</th>\n",
+       "      <td>Test/12627.png</td>\n",
+       "      <td>Test/12627.png</td>\n",
+       "      <td>6</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10258</th>\n",
+       "      <td>Test/12628.png</td>\n",
+       "      <td>Test/12628.png</td>\n",
+       "      <td>7</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10259</th>\n",
+       "      <td>Test/12629.png</td>\n",
+       "      <td>Test/12629.png</td>\n",
+       "      <td>10</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "         Non_Critical            Path  ClassId  Layer1_output\n",
+       "10255  Test/12625.png  Test/12625.png       12              0\n",
+       "10256  Test/12626.png  Test/12626.png       33              0\n",
+       "10257  Test/12627.png  Test/12627.png        6              0\n",
+       "10258  Test/12628.png  Test/12628.png        7              0\n",
+       "10259  Test/12629.png  Test/12629.png       10              0"
+      ]
+     },
+     "execution_count": 34,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_non_critical_final.tail()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "e87d6253",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.201253Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.200850Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.245487Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.244375Z"
+    },
+    "papermill": {
+     "duration": 0.063278,
+     "end_time": "2024-09-06T06:43:37.248068",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.184790",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "df.to_csv('filename.csv', index=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "8ebca18e",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.280859Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.280454Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.295806Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.294450Z"
+    },
+    "papermill": {
+     "duration": 0.035569,
+     "end_time": "2024-09-06T06:43:37.298457",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.262888",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "            Critical            Path  ClassId\n",
+      "0     Test/00006.png  Test/00006.png       18\n",
+      "1     Test/00008.png  Test/00008.png       25\n",
+      "2     Test/00012.png  Test/00012.png       23\n",
+      "3     Test/00016.png  Test/00016.png       21\n",
+      "4     Test/00017.png  Test/00017.png       20\n",
+      "...              ...             ...      ...\n",
+      "2365  Test/12608.png  Test/12608.png       18\n",
+      "2366  Test/12616.png  Test/12616.png       18\n",
+      "2367  Test/12617.png  Test/12617.png       31\n",
+      "2368  Test/12619.png  Test/12619.png       31\n",
+      "2369  Test/12624.png  Test/12624.png       25\n",
+      "\n",
+      "[2370 rows x 3 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_critical_final = pd.merge(df_cleaned_critical, df[['Path', 'ClassId']], left_on='Critical', right_on='Path', how='left')\n",
+    "# result_df2 = pd.merge(new_df, df[['Path', 'ClassId']], left_on='Non_Critical', right_on='Path', how='left')\n",
+    "\n",
+    "print(df_critical_final )"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2358353b",
+   "metadata": {
+    "papermill": {
+     "duration": 0.014999,
+     "end_time": "2024-09-06T06:43:37.329180",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.314181",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Getting a random sample"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "912b1d2a",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.363778Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.363118Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.373893Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.372754Z"
+    },
+    "papermill": {
+     "duration": 0.031393,
+     "end_time": "2024-09-06T06:43:37.376275",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.344882",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "            Critical            Path  ClassId\n",
+      "1012  Test/05478.png  Test/05478.png       21\n",
+      "1478  Test/07985.png  Test/07985.png       24\n",
+      "1726  Test/09267.png  Test/09267.png       21\n",
+      "930   Test/05050.png  Test/05050.png       25\n",
+      "78    Test/00339.png  Test/00339.png       22\n",
+      "838   Test/04571.png  Test/04571.png       31\n",
+      "2356  Test/12564.png  Test/12564.png       23\n",
+      "1626  Test/08751.png  Test/08751.png       31\n",
+      "154   Test/00829.png  Test/00829.png       27\n",
+      "945   Test/05151.png  Test/05151.png       25\n"
+     ]
+    }
+   ],
+   "source": [
+    "random_sample = df_critical_final.sample(n=10, random_state=72)\n",
+    "print(random_sample)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "c42c27a5",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.408514Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.407469Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.412820Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.411494Z"
+    },
+    "papermill": {
+     "duration": 0.023869,
+     "end_time": "2024-09-06T06:43:37.415121",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.391252",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# for index, i in enumerate(new_df['Critical']):\n",
+    "#     if i == None:  # Check for an empty string\n",
+    "#         print(new_df['Non_Critical'].iloc[index])\n",
+    "#         break# Print the corresponding Non_Critical value\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "44db1da7",
+   "metadata": {
+    "papermill": {
+     "duration": 0.014479,
+     "end_time": "2024-09-06T06:43:37.444647",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.430168",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# IMAGE VIEWING AND ANALYSIS"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "ef774549",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.476052Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.475650Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.480603Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.479479Z"
+    },
+    "papermill": {
+     "duration": 0.023734,
+     "end_time": "2024-09-06T06:43:37.483079",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.459345",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# print(type(combined_df[\"Non_Critical\"]))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "47fd4be2",
+   "metadata": {
+    "papermill": {
+     "duration": 0.014807,
+     "end_time": "2024-09-06T06:43:37.512877",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.498070",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Viewing Images using CSV Files**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "f994c4a2",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:37.544498Z",
+     "iopub.status.busy": "2024-09-06T06:43:37.544010Z",
+     "iopub.status.idle": "2024-09-06T06:43:37.902331Z",
+     "shell.execute_reply": "2024-09-06T06:43:37.900948Z"
+    },
+    "papermill": {
+     "duration": 0.378035,
+     "end_time": "2024-09-06T06:43:37.905926",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.527891",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Selected file: /kaggle/input/gtsrb-german-traffic-sign/Test/08768.png\n",
+      "ClassId: No vehicles\n"
+     ]
+    },
+    {
+     "data": {
+      "image/png": "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",
+      "text/plain": [
+       "<Figure size 640x480 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import os\n",
+    "import random\n",
+    "import cv2\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib.image as mpimg\n",
+    "import pandas as pd\n",
+    "\n",
+    "# Define paths\n",
+    "NON_CRITICAL_TRAIN_PATH = '/kaggle/input/gtsrb-german-traffic-sign/'\n",
+    "\n",
+    "# Get a random file path and corresponding ClassId from the 'Critical' column\n",
+    "random_row = df_non_critical_final .sample(n=1)  # Select a single random row\n",
+    "image_path = random_row['Non_Critical'].values[0]  # Extract the path from the selected row\n",
+    "class_id = random_row['ClassId'].values[0]  # Extract the ClassId from the selected row\n",
+    "\n",
+    "# Construct the full file path\n",
+    "file_path = os.path.join(NON_CRITICAL_TRAIN_PATH, image_path)\n",
+    "\n",
+    "# Print the selected file name and ClassId for reference\n",
+    "print(f\"Selected file: {file_path}\")\n",
+    "print(f\"ClassId: {class_names[int(class_id)]}\")\n",
+    "\n",
+    "# Read and display the image\n",
+    "img = mpimg.imread(file_path)\n",
+    "plt.imshow(img)\n",
+    "plt.axis('off')  # Hide axes\n",
+    "plt.show()\n",
+    "\n",
+    "# Load and preprocess the selected image\n",
+    "image = cv2.imread(file_path, cv2.IMREAD_COLOR)\n",
+    "\n",
+    "if image is not None:\n",
+    "    # Resize the image to (30, 30)\n",
+    "    image_resized = cv2.resize(image, (30, 30), interpolation=cv2.INTER_NEAREST)\n",
+    "    \n",
+    "    # Convert the image to a numpy array and add batch dimension\n",
+    "    data = np.expand_dims(np.array(image_resized), axis=0)\n",
+    "else:\n",
+    "    print(f\"Error loading image: {file_path}\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bfe01259",
+   "metadata": {
+    "papermill": {
+     "duration": 0.025374,
+     "end_time": "2024-09-06T06:43:37.957349",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.931975",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b73cc9cd",
+   "metadata": {
+    "papermill": {
+     "duration": 0.01519,
+     "end_time": "2024-09-06T06:43:37.989015",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:37.973825",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **Viewing image from dir**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "9a5bb389",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-09-06T06:43:38.022437Z",
+     "iopub.status.busy": "2024-09-06T06:43:38.021963Z",
+     "iopub.status.idle": "2024-09-06T06:43:38.114131Z",
+     "shell.execute_reply": "2024-09-06T06:43:38.112717Z"
+    },
+    "papermill": {
+     "duration": 0.1121,
+     "end_time": "2024-09-06T06:43:38.116835",
+     "exception": false,
+     "start_time": "2024-09-06T06:43:38.004735",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Selected file: /kaggle/input/gtsrb-german-traffic-sign/Test/05794.png\n"
+     ]
+    },
+    {
+     "data": {
+      "image/png": "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",
+      "text/plain": [
+       "<Figure size 640x480 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import os\n",
+    "import random\n",
+    "import cv2\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib.image as mpimg\n",
+    "\n",
+    "# Define paths\n",
+    "NON_CRITICAL_TRAIN_PATH = '/kaggle/input/gtsrb-german-traffic-sign/Test'\n",
+    "\n",
+    "# Get random values from the 8th and 9th columns\n",
+    "# image_path, actual_value = get_random_row_values(df, image_column, name_column)\n",
+    "# Select a single random image from the non-critical directory\n",
+    "file_list = os.listdir(NON_CRITICAL_TRAIN_PATH)\n",
+    "random_file = random.choice(file_list)\n",
+    "file_path = os.path.join(NON_CRITICAL_TRAIN_PATH, random_file)\n",
+    "\n",
+    "# Print the selected file name for reference\n",
+    "print(f\"Selected file: {file_path}\")\n",
+    "# print(f\"ClassId: {class_names[int(class_id)]}\")\n",
+    "# Read and display the image\n",
+    "img = mpimg.imread(file_path)\n",
+    "plt.imshow(img)\n",
+    "plt.axis('off')  # Hide axes\n",
+    "plt.show()\n",
+    "\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kaggle": {
+   "accelerator": "none",
+   "dataSources": [
+    {
+     "datasetId": 82373,
+     "sourceId": 191501,
+     "sourceType": "datasetVersion"
+    }
+   ],
+   "dockerImageVersionId": 30761,
+   "isGpuEnabled": false,
+   "isInternetEnabled": true,
+   "language": "python",
+   "sourceType": "notebook"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.14"
+  },
+  "papermill": {
+   "default_parameters": {},
+   "duration": 99.264994,
+   "end_time": "2024-09-06T06:43:38.653673",
+   "environment_variables": {},
+   "exception": null,
+   "input_path": "__notebook__.ipynb",
+   "output_path": "__notebook__.ipynb",
+   "parameters": {},
+   "start_time": "2024-09-06T06:41:59.388679",
+   "version": "2.6.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
